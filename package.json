@@ -4,6 +4,7 @@
   "description": "多功能导出文件",
   "version": "0.1.0",
   "publisher": "guoCc",
+  "license": "ISC",
   "engines": {
     "vscode": "^1.101.0"
   },
