@@ -78,11 +78,27 @@ export function activate(context: vscode.ExtensionContext) {
 		const workspacePath = workspaceFolders[0].uri.fsPath;
 
 		// 选择功能
-		const funcToolFag = await vscode.window.showInputBox({
-			prompt:'选择你的功能：输入1提取git commit的文件，输入2提取单个文件',
-			placeHolder:'输入1提取git commit的文件，输入2提取单个文件'
-		})
-		if(!funcToolFag) return
+		const selectedFunction = await vscode.window.showQuickPick([
+			{
+				label: '提取git commit的文件',
+				description: '从指定的git提交中导出所有修改的文件',
+				detail: '选择此选项将让您输入commit哈希并导出相关文件',
+				value: '1'
+			},
+			{
+				label: '提取单个文件',
+				description: '复制当前打开的文件到指定目录',
+				detail: '选择此选项将复制当前编辑器中的文件，保持项目目录结构',
+				value: '2'
+			}
+		], {
+			placeHolder: '请选择要执行的功能',
+			matchOnDescription: true,
+			matchOnDetail: true
+		});
+
+		if (!selectedFunction) return;
+		const funcToolFag = selectedFunction.value;
 		if(String(funcToolFag) == '2'){
 			return functool2({workspacePath})
 		}

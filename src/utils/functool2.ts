@@ -21,6 +21,7 @@ export const functool2 = async ({
     console.log(activeEditor)
     const sourceUri = activeEditor.document.uri;
     const fileName = path.basename(sourceUri.fsPath);
+    vscode.window.showInformationMessage(`即将拷贝文件：${sourceUri.fsPath}`)
 
     // 计算文件相对于工作区的相对路径
     const relativePath = path.relative(workspacePath, sourceUri.fsPath);
