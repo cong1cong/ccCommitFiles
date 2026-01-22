@@ -6,6 +6,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import { promisify } from 'util';
 import { exec } from 'child_process';
+import { functool2 } from './utils/functool2';
 const execAsync = promisify(exec);
 
 
@@ -67,7 +68,6 @@ export function activate(context: vscode.ExtensionContext) {
 		console.log(msg)
 		vscode.window.showInformationMessage('windom cc');
 
-
 		// 获取当前工作区
 		const workspaceFolders = vscode.workspace.workspaceFolders;
 		if (!workspaceFolders || workspaceFolders.length === 0) {
@@ -76,6 +76,16 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 
 		const workspacePath = workspaceFolders[0].uri.fsPath;
+
+		// 选择功能
+		const funcToolFag = await vscode.window.showInputBox({
+			prompt:'选择你的功能：输入1提取git commit的文件，输入2提取单个文件',
+			placeHolder:'输入1提取git commit的文件，输入2提取单个文件'
+		})
+		if(!funcToolFag) return
+		if(String(funcToolFag) == '2'){
+			return functool2({workspacePath})
+		}
 
 		// 让用户选择提交哈希
 		const commitHash = await vscode.window.showInputBox({
