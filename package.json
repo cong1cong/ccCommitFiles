@@ -1,8 +1,8 @@
 {
   "name": "cc-commit-files",
   "displayName": "ccCommitFiles",
-  "description": "一个用于导出Git提交中文件的VSCode插件",
-  "version": "0.0.2",
+  "description": "多功能导出文件",
+  "version": "0.1.0",
   "publisher": "guoCc",
   "engines": {
     "vscode": "^1.101.0"
