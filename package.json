@@ -2,7 +2,7 @@
   "name": "cc-commit-files",
   "displayName": "ccCommitFiles",
   "description": "多功能导出文件",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "guoCc",
   "license": "ISC",
   "engines": {
