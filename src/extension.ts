@@ -3,6 +3,7 @@
 import * as vscode from 'vscode';
 import { functool2 } from './utils/functool2';
 import {exportCommitFiles, openDirectoryInExplorer} from './utils/functool1'
+import { statusBarHandler } from './utils/createStatusBarItem';
 
 
 // This method is called when your extension is activated
@@ -96,6 +97,8 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	context.subscriptions.push(disposable);
+
+	statusBarHandler(context)
 }
 
 
