@@ -1,54 +1,9 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-
-import * as path from 'path';
-import * as fs from 'fs';
-import { promisify } from 'util';
-import { exec } from 'child_process';
 import { functool2 } from './utils/functool2';
-const execAsync = promisify(exec);
+import {exportCommitFiles, openDirectoryInExplorer} from './utils/functool1'
 
-
-async function exportCommitFiles(workspacePath: string, commitHash: string, targetDir: string) {
-	// 获取提交中的所有文件
-	const { stdout } = await execAsync(`git diff-tree --no-commit-id --name-only -r ${commitHash}`, { cwd: workspacePath });
-	const files = stdout.trim().split('\n').filter(Boolean);
-
-	// 导出每个文件
-	for (const file of files) {
-		try {
-			const targetPath = path.join(targetDir, file);
-			const dirname = path.dirname(targetPath);
-
-			// 创建目录
-			await fs.promises.mkdir(dirname, { recursive: true });
-
-			// 获取文件在提交中的内容
-			const { stdout: content } = await execAsync(`git show ${commitHash}:./${file}`, { cwd: workspacePath });
-
-			// 写入文件
-			await fs.promises.writeFile(targetPath, content);
-		} catch (error) {
-			console.error(`无法导出文件 ${file}: ${error}`);
-		}
-	}
-}
-
-async function openDirectoryInExplorer(path: string) {
-    try {
-        // 跨平台打开目录
-        const command = process.platform === 'win32' 
-            ? `explorer "${path}"`
-            : process.platform === 'darwin'
-                ? `open "${path}"`
-                : `xdg-open "${path}"`;
-        
-        await execAsync(command);
-    } catch (error) {
-        vscode.window.showErrorMessage(`无法打开目录: ${error}`);
-    }
-}
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -134,7 +89,7 @@ export function activate(context: vscode.ExtensionContext) {
 				vscode.window.showInformationMessage(`成功导出提交 ${commitHash} 的文件到 ${targetDir}`);
 			});
 			// 打开目录
-			// await openDirectoryInExplorer(targetDir)
+			await openDirectoryInExplorer(targetDir)
 		} catch (error) {
 			vscode.window.showErrorMessage(`导出失败: ${error}`);
 		}
